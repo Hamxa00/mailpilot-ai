@@ -11,24 +11,6 @@ export const metadata: Metadata = {
   title: "MailPilot AI",
   description:
     "A minimalist email client powered by AI. Focus on what matters. Let AI handle the rest.",
-  openGraph: {
-    title: "MailPilot AI",
-    description: "A minimalist email client powered by AI.",
-    images: [
-      {
-        url: "/next.svg",
-        width: 64,
-        height: 64,
-        alt: "MailPilot AI Logo",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary",
-    title: "MailPilot AI",
-    description: "A minimalist email client powered by AI.",
-    images: ["/next.svg"],
-  },
 };
 
 export default function RootLayout({
