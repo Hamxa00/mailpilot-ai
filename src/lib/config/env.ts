@@ -1,5 +1,9 @@
 /**
- * @fileoverview Environment configuration for MailPilot AI
+ * @fileoverview Environment config  // External Services
+  OPENAI_API_KEY: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().optional(),ion for MailPilot AI
  * @description Centralized environment variable management
  * @author MailPilot AI Team
  * @version 1.0.0
@@ -39,7 +43,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1, "Google Client Secret is required"),
 
   // External Services
-  OPENAI_API_KEY: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_PUBLISHABLE_KEY: z.string().optional(),
 
@@ -54,6 +58,45 @@ const envSchema = z.object({
  * Validate and parse environment variables
  */
 function validateEnv() {
+  // Skip validation entirely during Vercel build
+  if (process.env.VERCEL === "1" && !process.env.VERCEL_URL) {
+    console.log("Skipping environment validation during Vercel build...");
+    // Return safe defaults for build time
+    return {
+      NEXT_PUBLIC_SUPABASE_URL:
+        process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        "https://placeholder.supabase.co",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
+      SUPABASE_SERVICE_ROLE_KEY:
+        process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-service-key",
+      SUPABASE_WEBHOOK_SECRET: process.env.SUPABASE_WEBHOOK_SECRET || undefined,
+      DATABASE_URL:
+        process.env.DATABASE_URL ||
+        "postgresql://placeholder:placeholder@localhost:5432/placeholder",
+      NEXT_PUBLIC_APP_URL:
+        process.env.NEXT_PUBLIC_APP_URL || "https://placeholder.com",
+      NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || "MailPilot AI",
+      JWT_SECRET:
+        process.env.JWT_SECRET || "placeholder-jwt-secret-32-chars-minimum",
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "placeholder-client-id",
+      GOOGLE_CLIENT_SECRET:
+        process.env.GOOGLE_CLIENT_SECRET || "placeholder-client-secret",
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY || undefined,
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY || undefined,
+      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || undefined,
+      STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || undefined,
+      NODE_ENV:
+        (process.env.NODE_ENV as "development" | "production" | "test") ||
+        "development",
+      VERCEL_ENV: process.env.VERCEL_ENV as
+        | "development"
+        | "preview"
+        | "production"
+        | undefined,
+    };
+  }
+
   try {
     return envSchema.parse(process.env);
   } catch (error) {
@@ -61,49 +104,6 @@ function validateEnv() {
       const missingVars = error.issues
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
         .join("\n");
-
-      // During build phase, just log warnings instead of throwing
-      if (process.env.NODE_ENV === "production" && !process.env.VERCEL_URL) {
-        console.warn(
-          `Warning: Missing environment variables during build:\n${missingVars}\n\n` +
-            `This is expected during build time. Ensure variables are set in production.`
-        );
-        // Return a safe default object for build time
-        return {
-          NEXT_PUBLIC_SUPABASE_URL:
-            process.env.NEXT_PUBLIC_SUPABASE_URL ||
-            "https://placeholder.supabase.co",
-          NEXT_PUBLIC_SUPABASE_ANON_KEY:
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
-          SUPABASE_SERVICE_ROLE_KEY:
-            process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-service-key",
-          SUPABASE_WEBHOOK_SECRET: process.env.SUPABASE_WEBHOOK_SECRET,
-          DATABASE_URL:
-            process.env.DATABASE_URL ||
-            "postgresql://placeholder:placeholder@localhost:5432/placeholder",
-          NEXT_PUBLIC_APP_URL:
-            process.env.NEXT_PUBLIC_APP_URL || "https://placeholder.com",
-          NEXT_PUBLIC_APP_NAME:
-            process.env.NEXT_PUBLIC_APP_NAME || "MailPilot AI",
-          JWT_SECRET:
-            process.env.JWT_SECRET || "placeholder-jwt-secret-32-chars-minimum",
-          GOOGLE_CLIENT_ID:
-            process.env.GOOGLE_CLIENT_ID || "placeholder-client-id",
-          GOOGLE_CLIENT_SECRET:
-            process.env.GOOGLE_CLIENT_SECRET || "placeholder-client-secret",
-          OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-          STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-          STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-          NODE_ENV:
-            (process.env.NODE_ENV as "development" | "production" | "test") ||
-            "development",
-          VERCEL_ENV: process.env.VERCEL_ENV as
-            | "development"
-            | "preview"
-            | "production"
-            | undefined,
-        };
-      }
 
       throw new Error(
         `Invalid environment variables:\n${missingVars}\n\n` +
@@ -114,10 +114,23 @@ function validateEnv() {
   }
 }
 
+// Lazy evaluation - only validate when accessed
+let _env: ReturnType<typeof validateEnv> | null = null;
+
+/**
+ * Get validated environment variables
+ */
+function getEnv() {
+  if (_env === null) {
+    _env = validateEnv();
+  }
+  return _env;
+}
+
 /**
  * Validated environment variables
  */
-export const env = validateEnv();
+export const env = getEnv();
 
 /**
  * Supabase configuration
@@ -165,8 +178,8 @@ export const databaseConfig = {
  * External services configuration
  */
 export const servicesConfig = {
-  openai: {
-    apiKey: env.OPENAI_API_KEY,
+  gemini: {
+    apiKey: env.GEMINI_API_KEY,
   },
   stripe: {
     secretKey: env.STRIPE_SECRET_KEY,
@@ -225,7 +238,7 @@ export const getEnvInfo = () => {
     ),
     hasDatabase: !!env.DATABASE_URL,
     hasGoogleOAuth: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
-    hasOpenAI: !!env.OPENAI_API_KEY,
+    hasGemini: !!env.GEMINI_API_KEY,
     hasStripe: !!(env.STRIPE_SECRET_KEY && env.STRIPE_PUBLISHABLE_KEY),
   };
 };
