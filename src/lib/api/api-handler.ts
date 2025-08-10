@@ -474,10 +474,10 @@ export interface CrudHandlerOptions
  * CRUD operations interface
  */
 export interface CrudOperations<T> {
-  create(data: any): Promise<T>;
+  create(data: unknown): Promise<T>;
   findById(id: string): Promise<T | null>;
-  find(options?: any): Promise<{ data: T[]; total: number }>;
-  update(id: string, data: any): Promise<T>;
+  find(options?: unknown): Promise<{ data: T[]; total: number }>;
+  update(id: string, data: unknown): Promise<T>;
   delete(id: string): Promise<boolean>;
 }
 

@@ -196,9 +196,7 @@ export class AIProviderManager {
 
       // Use summarizeEmail as the base analysis method since analyzeEmail doesn't exist
       const summaryRequest: EmailSummaryRequest = { emailContent };
-      const result = await provider.summarizeEmail(summaryRequest);
-
-      // Transform the response into analysis format
+            // Transform the response into analysis format
       const analysis: EmailAnalysisResponse = {
         keyPoints: [result.content],
         actionItems: [],

@@ -125,9 +125,9 @@ export const measureSync = <T>(
  * @returns Wrapped handler with logging
  */
 export const withRequestLogging = (
-  handler: (request: NextRequest, context?: any) => Promise<NextResponse>
+  handler: (request: NextRequest, context?: unknown) => Promise<NextResponse>
 ) => {
-  return async (request: NextRequest, context?: any): Promise<NextResponse> => {
+  return async (request: NextRequest, context?: unknown): Promise<NextResponse> => {
     const requestContext = extractLogRequestContext(request);
 
     // Create child logger with request context
@@ -212,7 +212,7 @@ export const sanitizeLogData = (
 ): Record<string, any> => {
   const sanitized = { ...data };
 
-  const sanitizeValue = (obj: any, path: string[] = []): any => {
+  const sanitizeValue = (obj: any, path: string[] = []): unknown => {
     if (obj === null || obj === undefined) return obj;
 
     if (Array.isArray(obj)) {

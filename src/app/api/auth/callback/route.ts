@@ -15,7 +15,7 @@ import { env } from "@/lib/config";
  * Create a Supabase client that handles Next.js 15 async cookies
  */
 async function createSupabaseClient() {
-  const cookieStore = await cookies();
+  await cookies(); // Ensure cookies are available
 
   return createClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,

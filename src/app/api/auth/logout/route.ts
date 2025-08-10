@@ -16,7 +16,7 @@ import { getAuthUser } from "@/lib/auth/auth-middleware";
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const requestId = crypto.randomUUID();
-  (request as any).requestId = requestId;
+  (request as NextRequest & { requestId?: string }).requestId = requestId;
 
   try {
     // Get user info before logout for logging
@@ -82,10 +82,10 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     });
 
     return response;
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error("Unexpected error during logout", {
       requestId,
-      error: err?.message || err,
+      error: err instanceof Error ? err.message : String(err),
     });
 
     return error.internal("Logout failed due to server error", requestId);

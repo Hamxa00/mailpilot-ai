@@ -339,7 +339,7 @@ export const createRateLimitError = (
  * @param fn - Function to rate limit
  * @returns Rate limited function
  */
-export const rateLimited = <T extends (...args: any[]) => any>(
+export const rateLimited = <T extends (...args: unknown[]) => any>(
   config: RateLimitConfig,
   fn: T
 ): ((...args: Parameters<T>) => Promise<ReturnType<T>>) => {

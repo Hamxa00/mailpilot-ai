@@ -109,7 +109,7 @@ const webhookPayloadSchema = z.object({
  * Handle Supabase Auth webhooks
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-  const requestId = (request as any).requestId;
+  const requestId = (request as NextRequest & { requestId?: string }).requestId;
 
   try {
     // Rate limiting for webhook endpoint
@@ -227,7 +227,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
  * Webhook health check endpoint
  */
 export const GET = withErrorHandler(async (request: NextRequest) => {
-  const requestId = (request as any).requestId;
+  const requestId = (request as NextRequest & { requestId?: string }).requestId;
 
   return success.ok(
     {

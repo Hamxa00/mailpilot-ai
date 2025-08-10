@@ -18,7 +18,7 @@ import { logger } from "@/lib/logging";
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const requestId = crypto.randomUUID();
-  (request as any).requestId = requestId;
+  (request as NextRequest & { requestId?: string }).requestId = requestId;
 
   try {
     // Check rate limiting
@@ -102,7 +102,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       },
       requestId
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Handle validation errors
     if (err.name === "ValidationError" || err.message?.includes("validation")) {
       logger.warn("OAuth validation failed", {
@@ -122,7 +122,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     // Handle other errors
     logger.error("Unexpected error during OAuth initiation", {
       requestId,
-      error: err?.message || err,
+      error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     });
 
@@ -166,10 +166,10 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     };
 
     return success.ok(providers, requestId);
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error("Error fetching OAuth providers", {
       requestId,
-      error: err?.message || err,
+      error: err instanceof Error ? err.message : String(err),
     });
 
     return error.internal("Failed to load OAuth providers", requestId);

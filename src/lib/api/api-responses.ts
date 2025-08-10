@@ -255,7 +255,7 @@ export class ApiResponseBuilder<T = any> {
    * @param value - Metadata value
    * @returns Builder instance
    */
-  public meta(key: string, value: any): ApiResponseBuilder<T> {
+  public meta(key: string, value: unknown): ApiResponseBuilder<T> {
     if (!this.response.meta) {
       this.response.meta = {};
     }
@@ -512,7 +512,7 @@ export const error = {
    */
   validation: (
     message: string = "Validation failed",
-    validationErrors?: any[],
+    validationErrors?: unknown[],
     requestId?: string
   ): NextResponse => {
     const builder = createResponse().error(

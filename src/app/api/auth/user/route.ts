@@ -25,7 +25,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     if (!user) {
       return error.unauthorized(
         "Authentication required",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -49,13 +49,13 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
           createdAt: user.created_at,
         },
       },
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   } catch (err) {
     logger.error("Error retrieving user profile", { error: err });
     return error.internal(
       "Failed to retrieve user profile",
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   }
 });
@@ -72,7 +72,7 @@ export const PATCH = withErrorHandler(async (request: NextRequest) => {
     if (!user) {
       return error.unauthorized(
         "Authentication required",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -81,7 +81,7 @@ export const PATCH = withErrorHandler(async (request: NextRequest) => {
     const { firstName, lastName, displayName, avatarUrl, phone } = body;
 
     // Validate input (basic validation)
-    const updateData: any = {};
+    const updateData: unknown = {};
     if (firstName !== undefined) updateData.firstName = firstName;
     if (lastName !== undefined) updateData.lastName = lastName;
     if (displayName !== undefined) updateData.displayName = displayName;
@@ -92,7 +92,7 @@ export const PATCH = withErrorHandler(async (request: NextRequest) => {
     if (Object.keys(updateData).length === 0) {
       return error.badRequest(
         "No valid fields provided to update",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -110,7 +110,7 @@ export const PATCH = withErrorHandler(async (request: NextRequest) => {
 
       return error.badRequest(
         "Failed to update user information",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -137,13 +137,13 @@ export const PATCH = withErrorHandler(async (request: NextRequest) => {
         },
         message: "User profile updated successfully",
       },
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   } catch (err) {
     logger.error("Error updating user profile", { error: err });
     return error.internal(
       "Failed to update user profile",
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   }
 });

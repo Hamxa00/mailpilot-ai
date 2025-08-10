@@ -109,9 +109,7 @@ export const createClientSupabaseClient = () => {
  * Create Supabase client for API routes
  */
 export const createApiSupabaseClient = async (request: NextRequest) => {
-  const cookieStore = await cookies();
-
-  return createClient<Database>(
+    return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -511,8 +509,7 @@ export const signOutUser = async (
 
     if (request) {
       // For server-side API routes, use createClient with awaited cookies
-      const cookieStore = await cookies();
-      supabase = createClient<Database>(
+            supabase = createClient<Database>(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {

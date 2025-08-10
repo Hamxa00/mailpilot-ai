@@ -19,7 +19,7 @@ import { registerUser } from "@/lib/auth";
  * Get registration requirements and configuration
  */
 export const GET = withErrorHandler(async (request: NextRequest) => {
-  const requestId = (request as any).requestId;
+  const requestId = (request as NextRequest & { requestId?: string }).requestId;
 
   return success.ok(
     {
@@ -78,7 +78,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
  * Register a new user with email and password
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-  const requestId = (request as any).requestId;
+  const requestId = (request as NextRequest & { requestId?: string }).requestId;
 
   try {
     // Check rate limiting

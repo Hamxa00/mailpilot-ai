@@ -27,7 +27,7 @@ export interface SupabaseProvider {
    */
   subscribeToEmailUpdates(
     userId: string,
-    callback: (payload: any) => void
+    callback: (payload: unknown) => void
   ): Promise<() => void>;
 
   /**
@@ -35,7 +35,7 @@ export interface SupabaseProvider {
    */
   subscribeToSyncUpdates(
     userId: string,
-    callback: (payload: any) => void
+    callback: (payload: unknown) => void
   ): Promise<() => void>;
 
   /**

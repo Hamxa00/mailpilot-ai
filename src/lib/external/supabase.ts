@@ -93,7 +93,7 @@ class SupabaseProviderImpl implements SupabaseProvider {
    */
   public async subscribeToEmailUpdates(
     userId: string,
-    callback: (payload: any) => void
+    callback: (payload: unknown) => void
   ): Promise<() => void> {
     const subscriptionKey = `email_updates_${userId}`;
 
@@ -142,7 +142,7 @@ class SupabaseProviderImpl implements SupabaseProvider {
    */
   public async subscribeToSyncUpdates(
     userId: string,
-    callback: (payload: any) => void
+    callback: (payload: unknown) => void
   ): Promise<() => void> {
     const subscriptionKey = `sync_updates_${userId}`;
 

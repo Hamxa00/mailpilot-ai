@@ -97,7 +97,7 @@ export const requestIdMiddleware: ApiMiddleware = async (request, next) => {
   const requestId = crypto.randomUUID();
 
   // Add request ID to the request object for access in handlers
-  (request as any).requestId = requestId;
+  (request as NextRequest & { requestId?: string }).requestId = requestId;
 
   const response = await next();
 
@@ -127,7 +127,7 @@ export const requestTimingMiddleware: ApiMiddleware = async (request, next) => {
       path,
       status: response.status,
       duration,
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     // Add timing header
@@ -142,7 +142,7 @@ export const requestTimingMiddleware: ApiMiddleware = async (request, next) => {
       path,
       duration,
       error: error instanceof Error ? error.message : error,
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     throw error;
@@ -168,13 +168,13 @@ export const healthCheckMiddleware: ApiMiddleware = async (request, next) => {
       logger.warn("Database health check failed during request", {
         path: url.pathname,
         method: request.method,
-        requestId: (request as any).requestId,
+        requestId: (request as NextRequest & { requestId?: string }).requestId,
       });
 
       return error.serviceUnavailable(
         "Service temporarily unavailable",
         30, // Retry after 30 seconds
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -182,13 +182,13 @@ export const healthCheckMiddleware: ApiMiddleware = async (request, next) => {
   } catch (healthError) {
     logger.error("Health check middleware error", {
       error: healthError instanceof Error ? healthError.message : healthError,
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     return error.serviceUnavailable(
       "Service health check failed",
       60, // Retry after 1 minute
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   }
 };
@@ -243,13 +243,13 @@ export const rateLimitingMiddleware = (config: {
         maxRequests,
         windowMs,
         retryAfter,
-        requestId: (request as any).requestId,
+        requestId: (request as NextRequest & { requestId?: string }).requestId,
       });
 
       return error.rateLimited(
         `Too many requests. Try again in ${retryAfter} seconds.`,
         retryAfter,
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     } else {
       // Increment request count
@@ -293,13 +293,13 @@ export const requestSizeLimitMiddleware = (maxSize: number): ApiMiddleware => {
         logger.warn("Request size exceeded", {
           size,
           maxSize,
-          requestId: (request as any).requestId,
+          requestId: (request as NextRequest & { requestId?: string }).requestId,
         });
 
         return error.badRequest(
           `Request body too large. Maximum size is ${maxSize} bytes.`,
           { maxSize, actualSize: size },
-          (request as any).requestId
+          (request as NextRequest & { requestId?: string }).requestId
         );
       }
     }
@@ -338,7 +338,7 @@ export const contentTypeMiddleware = (
           received: contentType,
           allowed: allowedTypes,
         },
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -397,7 +397,7 @@ export const versioningMiddleware = (
           requested: version,
           supported: supportedVersions,
         },
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -429,7 +429,7 @@ export const requestLoggingMiddleware: ApiMiddleware = async (
     ip:
       request.headers.get("x-forwarded-for")?.split(",")[0] ||
       request.headers.get("x-real-ip"),
-    requestId: (request as any).requestId,
+    requestId: (request as NextRequest & { requestId?: string }).requestId,
   });
 
   try {
@@ -441,7 +441,7 @@ export const requestLoggingMiddleware: ApiMiddleware = async (
       path: url.pathname,
       status: response.status,
       duration,
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     return response;
@@ -454,7 +454,7 @@ export const requestLoggingMiddleware: ApiMiddleware = async (
       duration,
       error:
         requestError instanceof Error ? requestError.message : requestError,
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     throw requestError;

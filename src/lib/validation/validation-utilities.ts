@@ -177,7 +177,7 @@ export const validateWithPreprocessing = <T>(
   schema: z.ZodSchema<T>,
   data: unknown,
   preprocessors?: {
-    [key: string]: (value: any) => any;
+    [key: string]: (value: unknown) => any;
   }
 ): T => {
   let processedData = data;
@@ -257,7 +257,7 @@ export const sanitizeAndValidate = <T>(
 ): T => {
   const { trimStrings = true, removeEmpty = false, maxStringLength } = options;
 
-  const sanitizeValue = (value: any): any => {
+  const sanitizeValue = (value: unknown): unknown => {
     if (typeof value === "string") {
       let sanitized = value;
 

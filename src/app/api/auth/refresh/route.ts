@@ -15,7 +15,7 @@ import { logger } from "@/lib/logging";
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const requestId = crypto.randomUUID();
-  (request as any).requestId = requestId;
+  (request as NextRequest & { requestId?: string }).requestId = requestId;
 
   try {
     logger.debug("Session refresh attempt", { requestId });
@@ -81,10 +81,10 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       },
       requestId
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     logger.error("Unexpected error during session refresh", {
       requestId,
-      error: err?.message || err,
+      error: err instanceof Error ? err.message : String(err),
     });
 
     return error.internal(

@@ -99,7 +99,7 @@ export const normalizeError = (
 
   // Zod validation error
   if (error instanceof ZodError) {
-    const validationErrors = error.issues.map((issue: any) => ({
+    const validationErrors = error.issues.map((issue: unknown) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,
@@ -213,9 +213,9 @@ export const createErrorResponse = (error: AppError): NextResponse => {
  * @returns Wrapped handler with error handling
  */
 export const withErrorHandler = (
-  handler: (request: NextRequest, context?: any) => Promise<NextResponse>
+  handler: (request: NextRequest, context?: unknown) => Promise<NextResponse>
 ) => {
-  return async (request: NextRequest, context?: any): Promise<NextResponse> => {
+  return async (request: NextRequest, context?: unknown): Promise<NextResponse> => {
     try {
       return await handler(request, context);
     } catch (error) {

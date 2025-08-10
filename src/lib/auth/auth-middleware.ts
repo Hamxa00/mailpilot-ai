@@ -65,7 +65,7 @@ export const withAuth = (options: AuthMiddlewareOptions = {}) => {
 
         return error.forbidden(
           "Account is inactive",
-          (request as any).requestId
+          (request as NextRequest & { requestId?: string }).requestId
         );
       }
 
@@ -93,7 +93,7 @@ export const withAuth = (options: AuthMiddlewareOptions = {}) => {
           ip: request.headers.get("x-forwarded-for") || "unknown",
         });
 
-        return error.unauthorized(errorMessage, (request as any).requestId);
+        return error.unauthorized(errorMessage, (request as NextRequest & { requestId?: string }).requestId);
       }
 
       if (err instanceof AuthorizationError) {
@@ -105,7 +105,7 @@ export const withAuth = (options: AuthMiddlewareOptions = {}) => {
 
         return error.forbidden(
           "Insufficient permissions",
-          (request as any).requestId
+          (request as NextRequest & { requestId?: string }).requestId
         );
       }
 
@@ -116,7 +116,7 @@ export const withAuth = (options: AuthMiddlewareOptions = {}) => {
 
       return error.internal(
         "Internal server error",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
   };
@@ -272,7 +272,7 @@ export const createAuthApiHandler = (
       if (!authContext) {
         return error.internal(
           "Authentication context missing",
-          (request as any).requestId
+          (request as NextRequest & { requestId?: string }).requestId
         );
       }
 

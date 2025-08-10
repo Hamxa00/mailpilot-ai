@@ -128,8 +128,7 @@ export const dateValidations = {
   /** Birth date (reasonable age range) */
   birthDate: z.date().refine(
     (date) => {
-      const now = new Date();
-      const age = now.getFullYear() - date.getFullYear();
+            const age = now.getFullYear() - date.getFullYear();
       return age >= 13 && age <= 120;
     },
     { message: "Invalid birth date" }

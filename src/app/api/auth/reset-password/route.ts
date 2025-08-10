@@ -18,7 +18,7 @@ import { logger, logUserActivity } from "@/lib/logging";
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const requestId = crypto.randomUUID();
-  (request as any).requestId = requestId;
+  (request as NextRequest & { requestId?: string }).requestId = requestId;
 
   try {
     // Check rate limiting
@@ -89,7 +89,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       },
       requestId
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Handle validation errors
     if (err.name === "ValidationError" || err.message?.includes("validation")) {
       logger.warn("Password reset validation failed", {
@@ -107,7 +107,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     // Handle other errors
     logger.error("Unexpected error during password reset request", {
       requestId,
-      error: err?.message || err,
+      error: err instanceof Error ? err.message : String(err),
       stack: err instanceof Error ? err.stack : undefined,
     });
 

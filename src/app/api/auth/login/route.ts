@@ -28,14 +28,14 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
       return error.rateLimited(
         "Too many login attempts",
         rateLimitResult.retryAfter,
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
     // Validate request body
     const body = await request.json();
     const validatedData = validateOrThrow(supabaseLoginSchema, body, {
-      requestId: (request as any).requestId,
+      requestId: (request as NextRequest & { requestId?: string }).requestId,
     });
 
     logger.info("User login attempt", {
@@ -56,7 +56,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
       return error.unauthorized(
         "Invalid credentials",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -68,7 +68,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
       return error.forbidden(
         "Please verify your email before signing in",
-        (request as any).requestId
+        (request as NextRequest & { requestId?: string }).requestId
       );
     }
 
@@ -94,13 +94,13 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
           expiresAt: new Date(result.session.expires_at! * 1000).toISOString(),
         },
       },
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   } catch (err) {
     logger.error("Unexpected error during login", { error: err });
     return error.internal(
       "Login failed due to server error",
-      (request as any).requestId
+      (request as NextRequest & { requestId?: string }).requestId
     );
   }
 });
