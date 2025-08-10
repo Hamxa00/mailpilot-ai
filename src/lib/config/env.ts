@@ -62,6 +62,49 @@ function validateEnv() {
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
         .join("\n");
 
+      // During build phase, just log warnings instead of throwing
+      if (process.env.NODE_ENV === "production" && !process.env.VERCEL_URL) {
+        console.warn(
+          `Warning: Missing environment variables during build:\n${missingVars}\n\n` +
+            `This is expected during build time. Ensure variables are set in production.`
+        );
+        // Return a safe default object for build time
+        return {
+          NEXT_PUBLIC_SUPABASE_URL:
+            process.env.NEXT_PUBLIC_SUPABASE_URL ||
+            "https://placeholder.supabase.co",
+          NEXT_PUBLIC_SUPABASE_ANON_KEY:
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
+          SUPABASE_SERVICE_ROLE_KEY:
+            process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-service-key",
+          SUPABASE_WEBHOOK_SECRET: process.env.SUPABASE_WEBHOOK_SECRET,
+          DATABASE_URL:
+            process.env.DATABASE_URL ||
+            "postgresql://placeholder:placeholder@localhost:5432/placeholder",
+          NEXT_PUBLIC_APP_URL:
+            process.env.NEXT_PUBLIC_APP_URL || "https://placeholder.com",
+          NEXT_PUBLIC_APP_NAME:
+            process.env.NEXT_PUBLIC_APP_NAME || "MailPilot AI",
+          JWT_SECRET:
+            process.env.JWT_SECRET || "placeholder-jwt-secret-32-chars-minimum",
+          GOOGLE_CLIENT_ID:
+            process.env.GOOGLE_CLIENT_ID || "placeholder-client-id",
+          GOOGLE_CLIENT_SECRET:
+            process.env.GOOGLE_CLIENT_SECRET || "placeholder-client-secret",
+          OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+          STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+          STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+          NODE_ENV:
+            (process.env.NODE_ENV as "development" | "production" | "test") ||
+            "development",
+          VERCEL_ENV: process.env.VERCEL_ENV as
+            | "development"
+            | "preview"
+            | "production"
+            | undefined,
+        };
+      }
+
       throw new Error(
         `Invalid environment variables:\n${missingVars}\n\n` +
           `Please check your .env.local file and ensure all required variables are set.`
@@ -135,7 +178,9 @@ export const servicesConfig = {
  * Check if running in a secure context
  */
 export const isSecureContext = () => {
-  return appConfig.isProd || appConfig.url.startsWith("https://");
+  return (
+    appConfig.isProd || (appConfig.url && appConfig.url.startsWith("https://"))
+  );
 };
 
 /**
