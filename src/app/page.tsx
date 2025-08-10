@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, CirclePlay } from "lucide-react";
 import { Typography } from "@/components/ui/typography";
+import { DatabaseStatusCard } from "@/components/database-status-card";
 
 export default function Home() {
   return (
@@ -61,6 +62,11 @@ export default function Home() {
         <Typography variant="muted" className="mt-6 text-sm">
           Built for speed. Powered by intelligence. Loved by inbox minimalists.
         </Typography>
+
+        {/* Database Status Card */}
+        <div className="mt-12">
+          <DatabaseStatusCard />
+        </div>
       </div>
     </div>
   );
