@@ -33,6 +33,7 @@ const envSchema = z.object({
 
   // Authentication
   JWT_SECRET: z.string().min(32, "JWT secret must be at least 32 characters"),
+  NEXTAUTH_SECRET: z.string().optional(),
 
   // Google OAuth
   GOOGLE_CLIENT_ID: z.string().min(1, "Google Client ID is required"),
@@ -40,9 +41,9 @@ const envSchema = z.object({
 
   // External Services
   OPENAI_API_KEY: z.string().optional(),
-  GEMINI_API_KEY: z.string().optional(),
-  STRIPE_SECRET_KEY: z.string().optional(),
-  STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional().or(z.literal("")),
+  STRIPE_SECRET_KEY: z.string().optional().or(z.literal("")),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional().or(z.literal("")),
 
   // Environment
   NODE_ENV: z
@@ -77,13 +78,15 @@ function getSafeEnv() {
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || "MailPilot AI",
     JWT_SECRET:
       process.env.JWT_SECRET || "placeholder-jwt-secret-32-chars-minimum",
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "placeholder-client-id",
     GOOGLE_CLIENT_SECRET:
       process.env.GOOGLE_CLIENT_SECRET || "placeholder-client-secret",
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "",
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
     NODE_ENV:
       (process.env.NODE_ENV as "development" | "production" | "test") ||
       "development",
@@ -167,7 +170,7 @@ export const servicesConfig = {
   },
   stripe: {
     secretKey: env.STRIPE_SECRET_KEY,
-    publishableKey: env.STRIPE_PUBLISHABLE_KEY,
+    publishableKey: env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
 } as const;
 
@@ -224,6 +227,8 @@ export const getEnvInfo = () => {
     hasGoogleOAuth: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
     hasOpenAI: !!env.OPENAI_API_KEY,
     hasGemini: !!env.GEMINI_API_KEY,
-    hasStripe: !!(env.STRIPE_SECRET_KEY && env.STRIPE_PUBLISHABLE_KEY),
+    hasStripe: !!(
+      env.STRIPE_SECRET_KEY && env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    ),
   };
 };
