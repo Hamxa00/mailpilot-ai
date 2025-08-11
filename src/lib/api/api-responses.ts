@@ -690,7 +690,9 @@ export const downloadResponse = (
       : Buffer.byteLength(data).toString(),
   };
 
-  return new NextResponse(data, { headers });
+  const body =
+    typeof data === "string" ? data : new Uint8Array(data as Buffer);
+  return new NextResponse(body, { headers });
 };
 
 /**

@@ -13,6 +13,11 @@ import winston from "winston";
 const isProduction = process.env.NODE_ENV === "production";
 const isDevelopment = process.env.NODE_ENV === "development";
 const isTest = process.env.NODE_ENV === "test";
+const isServerless = !!(
+  process.env.VERCEL ||
+  process.env.NETLIFY ||
+  process.env.AWS_LAMBDA_FUNCTION_NAME
+);
 
 /**
  * Log levels for different environments
@@ -85,8 +90,8 @@ if (isDevelopment || isTest) {
   );
 }
 
-// File transports for production
-if (isProduction) {
+// File transports for production (but not in serverless environments)
+if (isProduction && !isServerless) {
   // General application logs
   transports.push(
     new winston.transports.File({
@@ -137,9 +142,9 @@ const logger = winston.createLogger({
 });
 
 /**
- * Add exception and rejection handlers for production
+ * Add exception and rejection handlers for production (but not in serverless environments)
  */
-if (isProduction) {
+if (isProduction && !isServerless) {
   logger.exceptions.handle(
     new winston.transports.File({
       filename: "logs/exceptions.log",
